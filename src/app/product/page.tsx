@@ -1,5 +1,8 @@
+import WebsiteLayout from "@/components/WebsiteLayout";
+
 export default function Product() {
   return (
+    <WebsiteLayout>
     <main>
       <section>
         <div className="background__contanctUs animate-bg">
@@ -13,5 +16,6 @@ export default function Product() {
         </div>
       </section>
     </main>
+    </WebsiteLayout>
   );
 }

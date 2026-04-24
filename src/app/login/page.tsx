@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import WebsiteLayout from '@/components/WebsiteLayout';
 
 export default function Login() {
   return (
+    <WebsiteLayout>
     <main>
       <section style={{ minHeight: '100vh', display: 'flex' }}>
         <div className="container__login">
@@ -47,5 +49,6 @@ export default function Login() {
         </div>
       </section>
     </main>
+    </WebsiteLayout>
   );
 }

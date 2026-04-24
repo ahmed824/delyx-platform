@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import WebsiteLayout from '@/components/WebsiteLayout';
 
 export default function Register() {
   return (
+    <WebsiteLayout>
     <main>
       <section style={{ minHeight: '100vh', display: 'flex' }}>
         <div className="container__register">
@@ -53,5 +55,6 @@ export default function Register() {
         </div>    
       </section>
     </main>
+    </WebsiteLayout>
   );
 }

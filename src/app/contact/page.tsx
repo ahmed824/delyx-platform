@@ -1,5 +1,8 @@
+import WebsiteLayout from "@/components/WebsiteLayout";
+
 export default function Contact() {
   return (
+    <WebsiteLayout>
     <main>
       <section>
         <div className="background__contanctUs animate-bg">
@@ -66,5 +69,6 @@ export default function Contact() {
         </div>       
       </section>
     </main>
+    </WebsiteLayout>
   );
 }
