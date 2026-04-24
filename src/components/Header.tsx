@@ -40,6 +40,7 @@ export default function Header() {
               <Link href="/services" className={pathname === '/services' ? 'active' : ''}>Services</Link>
               <Link href="/product" className={pathname === '/product' ? 'active' : ''}>Product</Link>
               <Link href="/contact" className={pathname === '/contact' ? 'active' : ''}>Contact US</Link>
+              <Link href="/dashboard" className={pathname === '/dashboard' ? 'active' : ''}>Dashboard</Link>
             </div>
           </nav>
           <div className="icon__header animate-icons">
