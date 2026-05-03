@@ -3,51 +3,88 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { updates } from "@/data/dashboard";
 
 export default function TrackingPage() {
+  const orders = [
+    {
+      id: '#35787588',
+      status: 'Delivery',
+      from: '12 Mustafa El-Nahhas St, Nasr City',
+      to: 'Abbas El Akkad St, Nasr City',
+      customer: 'Ahmed Hassan',
+      note: 'Customer',
+    },
+    {
+      id: '#87686588',
+      status: 'Pending',
+      from: 'Villa 15, Street 90, New Cairo',
+      to: 'Axis Road, 6th of October City, Giza',
+      customer: 'Omar Khaled',
+      note: 'Customer',
+    },
+    {
+      id: '#96870980',
+      status: 'Transit',
+      from: 'Building 8, District 5, New Cairo',
+      to: 'Axis Road, 6th of October City, Giza',
+      customer: 'Amr Samir',
+      note: 'Customer',
+    },
+  ];
+
   return (
     <DashboardLayout title="Tracking Delivery">
       <div className="tracking-grid">
-        <Card className="map-card">
+        <div className="orders-column">
+          {orders.map((o) => (
+            <Card key={o.id} className="order-card">
+              <div className="order-header">
+                <strong className="order-id">{o.id}</strong>
+                <span className={`badge ${o.status.toLowerCase()}`}>{o.status}</span>
+              </div>
+
+              <div className="order-body">
+                <div className="progress-line">
+                  <span className="dot start" />
+                  <span className="line" />
+                  <img src="/images/car-deliver.png" alt="robot" className="robot-mini" />
+                  <span className="dot end" />
+                </div>
+
+                <div className="addresses">
+                  <div className="addr from">{o.from}</div>
+                  <div className="addr to">{o.to}</div>
+                </div>
+              </div>
+
+              <div className="order-footer">
+                <div className="customer">
+                  <img src="/images/avatar-placeholder.png" alt="avatar" className="avatar" />
+                  <div>
+                    <div className="name">{o.customer}</div>
+                    <div className="role">{o.note}</div>
+                  </div>
+                </div>
+                <div className="contacts">
+                  <button className="icon-btn"><i className="fa-solid fa-phone"></i></button>
+                  <button className="icon-btn"><i className="fa-solid fa-envelope"></i></button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <Card className="map-card large-map">
           <div className="map-toolbar">
             <div>
               <h2>Live delivery map</h2>
               <p>Order N°674839 • ETA 12 min</p>
             </div>
-            <span>Live</span>
+            <span className="live-pill">Live</span>
           </div>
-          <div className="mock-map">
-            <span className="route route-a"></span>
-            <span className="route route-b"></span>
+          <div className="mock-map large">
+            <span className="route route-a" />
             <span className="pin pin-start"><i className="fa-solid fa-store"></i></span>
-            <span className="pin pin-robot"><i className="fa-solid fa-location-arrow"></i></span>
+            <span className="pin pin-robot"><img src="/images/car-deliver.png" alt="robot"/></span>
             <span className="pin pin-end"><i className="fa-solid fa-house"></i></span>
-          </div>
-        </Card>
-
-        <Card className="timeline-card">
-          <h2>Order tracking status</h2>
-          <div className="delivery-timeline">
-            <div className="done"><i></i><strong>Preparing</strong><span>Package verified</span></div>
-            <div className="active"><i></i><strong>On way</strong><span>Robot is moving to customer</span></div>
-            <div><i></i><strong>Delivered</strong><span>Waiting for confirmation</span></div>
-          </div>
-        </Card>
-
-        <Card className="robot-card">
-          <div className="robot-avatar"><i className="fa-solid fa-robot"></i></div>
-          <h2>DX-04 Delivery Robot</h2>
-          <p>Autonomous unit • Battery 86%</p>
-          <div className="robot-stats">
-            <span><b>3.2 km</b> Distance</span>
-            <span><b>12 min</b> ETA</span>
-          </div>
-        </Card>
-
-        <Card className="updates-card">
-          <h2>Real-time updates</h2>
-          <div className="updates-list">
-            {updates.map((update, index) => (
-              <p key={update}><span>{index + 1}</span>{update}</p>
-            ))}
           </div>
         </Card>
       </div>
