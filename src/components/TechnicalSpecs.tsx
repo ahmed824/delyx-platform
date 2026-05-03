@@ -3,8 +3,6 @@ export default function TechnicalSpecs() {
     { category: "Controller", details: "Raspberry Pi 4B (BCM2711 quad-core ARM)" },
     { category: "Processing Power", details: "4GB RAM, 64-bit CPU @ 1.5GHz" },
     { category: "Camera System", details: "USB 1080p camera with wide-angle lens for navigation" },
-    { category: "Ultrasonic Sensors", details: "8x HC-SR04 for obstacle detection and distance measurement" },
-    { category: "IMU Sensor", details: "9-axis accelerometer, gyroscope, magnetometer (MPU-9250)" },
     { category: "Connectivity", details: "Wi-Fi 802.11ac, Bluetooth 5.0, optional LTE module" },
     { category: "Power System", details: "Dual 18650 Li-ion batteries, 10+ hour runtime" },
     { category: "Motor Drivers", details: "DC motor drivers (TB6612FNG) with PID-controlled velocity" },
