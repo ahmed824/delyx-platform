@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Order } from "@/data/dashboard";
+import type { Order } from "@/lib/types";
 
 type OrderTableProps = {
   orders: Order[];

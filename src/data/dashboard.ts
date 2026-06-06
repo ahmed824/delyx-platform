@@ -1,15 +1,4 @@
-export type OrderStatus = "New" | "Waiting" | "On Way" | "Delivered";
-
-export type Order = {
-  id: string;
-  customer: string;
-  category: string;
-  price: number;
-  date: string;
-  payment: string;
-  status: OrderStatus;
-  address: string;
-};
+import type { Order, StatusSummary } from "@/lib/types";
 
 export const orders: Order[] = [
   {
@@ -94,7 +83,7 @@ export const orders: Order[] = [
   },
 ];
 
-export const statusSummary = [
+export const statusSummary: StatusSummary[] = [
   { label: "New order", count: 12, trend: "2.67%", tone: "up" },
   { label: "Waiting order", count: 20, trend: "1.66%", tone: "up" },
   { label: "On way order", count: 19, trend: "2.67%", tone: "down" },
