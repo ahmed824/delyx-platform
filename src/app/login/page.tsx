@@ -25,15 +25,36 @@ export default function Login() {
     e.preventDefault();
     signIn(form as SignInPayload, {
       onSuccess: (response) => {
-        toast.success(response.message);
-        localStorage.setItem("access_token", response.access_token);
-        localStorage.setItem("refresh_token", response.refresh_token);
+        console.log('[Login Success]', {
+          message: response.message,
+          accessTokenLength: response.access_token?.length,
+          accessTokenPreview: response.access_token ? `${response.access_token.substring(0, 20)}...` : 'none',
+          refreshTokenLength: response.refresh_token?.length,
+          role: response.role,
+        });
+
+        // Trim tokens to remove any whitespace
+        const accessToken = response.access_token?.trim();
+        const refreshToken = response.refresh_token?.trim();
+
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
         localStorage.setItem("user_role", response.role);
+
+        // Verify storage
+        console.log('[Login Storage]', {
+          storedAccessToken: localStorage.getItem("access_token")?.substring(0, 20) + '...',
+          storedRefreshToken: localStorage.getItem("refresh_token")?.substring(0, 20) + '...',
+          storedRole: localStorage.getItem("user_role"),
+        });
+
+        toast.success(response.message);
         setTimeout(() => {
           router.push("/");
         }, 1000);
       },
       onError: (error: any) => {
+        console.error('[Login Error]', error);
         toast.error(error.message || "Login failed");
       },
     });

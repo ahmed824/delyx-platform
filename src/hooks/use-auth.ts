@@ -62,6 +62,14 @@ export type SignInResponse = {
   role: string;
 };
 
+export type LogoutPayload = {
+  flag: string;
+};
+
+export type LogoutResponse = {
+  message: string;
+};
+
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginPayload) => api.post("/auth/login", data),
@@ -86,5 +94,12 @@ export function useSignIn() {
   return useMutation({
     mutationFn: (data: SignInPayload) =>
       api.post<SignInResponse>("/users/signin", data),
+  });
+}
+
+export function useLogout() {
+  return useMutation({
+    mutationFn: (data: LogoutPayload) =>
+      api.post<LogoutResponse>("/users/logout", data),
   });
 }

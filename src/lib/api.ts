@@ -35,15 +35,49 @@ async function request<T>(
     if (qs) url += `?${qs}`;
   }
 
+  // Add Authorization header if token exists
+  let token = typeof window !== 'undefined' ? localStorage.getItem("access_token") : null;
+
+  // Trim token to remove any whitespace
+  if (token) {
+    token = token.trim();
+  }
+
+  // Debug logs
+  console.log('[API Request]', {
+    endpoint,
+    method: fetchOptions.method || 'GET',
+    hasToken: !!token,
+    tokenLength: token?.length,
+    tokenPreview: token ? `${token.substring(0, 20)}...` : 'none',
+    tokenStartsWithBearer: token?.startsWith('eyJ'),
+  });
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...(fetchOptions.headers as Record<string, string>),
+  };
+
+  console.log('[API Headers]', {
+    hasAuthorization: !!headers.Authorization,
+    authHeaderLength: headers.Authorization?.length,
+    authHeaderPreview: headers.Authorization ? `${headers.Authorization.substring(0, 30)}...` : 'none',
+    fullAuthHeader: headers.Authorization ? `Bearer ${token?.substring(0, 20)}...` : 'none',
+  });
+
   const response = await fetch(url, {
     ...fetchOptions,
-    headers: {
-      "Content-Type": "application/json",
-      ...fetchOptions.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
+    const errorText = await response.text();
+    console.error('[API Error]', {
+      status: response.status,
+      statusText: response.statusText,
+      body: errorText,
+    });
     throw new ApiError(
       `API error: ${response.statusText}`,
       response.status
