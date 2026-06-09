@@ -5,24 +5,7 @@ import Card from "@/components/dashboard/Card";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { updates } from "@/data/dashboard";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-
-interface Device {
-  _id: string;
-  deviceName: string;
-  type: string;
-  status: string;
-  isActive: boolean;
-  lastLocation: {
-    lat: number;
-    lng: number;
-  };
-  lastSeen: string;
-  currentOrder: any;
-}
-
-interface DevicesResponse {
-  devices: Device[];
-}
+import { devicesApi, type Device } from "@/lib/api";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
@@ -75,34 +58,15 @@ export default function TrackingPage() {
 
   const fetchDevices = async () => {
     try {
-      const token = localStorage.getItem("access_token");
-      const role = localStorage.getItem("user_role");
-      
-      let headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-
-      if (role === "admin") {
-        headers["Authorization"] = `admin ${token}`;
-      } else {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-
-      const response = await fetch("https://delyx-backend.onrender.com/device", {
-        headers,
-      });
-
-      if (response.ok) {
-        const data: DevicesResponse = await response.json();
-        setDevices(data.devices);
-        if (data.devices.length > 0) {
-          setSelectedDevice(data.devices[0]);
-          if (data.devices[0].lastLocation) {
-            setMapCenter({
-              lat: data.devices[0].lastLocation.lat,
-              lng: data.devices[0].lastLocation.lng,
-            });
-          }
+      const data = await devicesApi.getDevices();
+      setDevices(data.devices);
+      if (data.devices.length > 0) {
+        setSelectedDevice(data.devices[0]);
+        if (data.devices[0].lastLocation) {
+          setMapCenter({
+            lat: data.devices[0].lastLocation.lat,
+            lng: data.devices[0].lastLocation.lng,
+          });
         }
       }
     } catch (error) {

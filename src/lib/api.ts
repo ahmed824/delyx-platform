@@ -37,6 +37,7 @@ async function request<T>(
 
   // Add Authorization header if token exists
   let token = typeof window !== 'undefined' ? localStorage.getItem("access_token") : null;
+  let role = typeof window !== 'undefined' ? localStorage.getItem("user_role") : null;
 
   // Trim token to remove any whitespace
   if (token) {
@@ -48,6 +49,7 @@ async function request<T>(
     endpoint,
     method: fetchOptions.method || 'GET',
     hasToken: !!token,
+    userRole: role,
     tokenLength: token?.length,
     tokenPreview: token ? `${token.substring(0, 20)}...` : 'none',
     tokenStartsWithBearer: token?.startsWith('eyJ'),
@@ -55,15 +57,23 @@ async function request<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
     ...(fetchOptions.headers as Record<string, string>),
   };
+
+  // Handle authentication based on user role
+  if (token) {
+    if (role === "admin") {
+      headers["Authorization"] = `admin ${token}`;
+    } else {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+  }
 
   console.log('[API Headers]', {
     hasAuthorization: !!headers.Authorization,
     authHeaderLength: headers.Authorization?.length,
     authHeaderPreview: headers.Authorization ? `${headers.Authorization.substring(0, 30)}...` : 'none',
-    fullAuthHeader: headers.Authorization ? `Bearer ${token?.substring(0, 20)}...` : 'none',
+    fullAuthHeader: headers.Authorization ? `${role === 'admin' ? 'admin' : 'Bearer'} ${token?.substring(0, 20)}...` : 'none',
   });
 
   const response = await fetch(url, {
@@ -114,4 +124,73 @@ export const api = {
 
   delete: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { ...options, method: "DELETE" }),
+};
+
+// Order API types
+export interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+export interface CreateOrderRequest {
+  items: OrderItem[];
+  totalPrice: number;
+}
+
+export interface ApiOrder {
+  _id: string;
+  userId: string;
+  status: string;
+  otp: string;
+  otpUsed: boolean;
+  items: OrderItem[];
+  totalPrice: number;
+  isCancelled: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface OrdersResponse {
+  orders: ApiOrder[];
+}
+
+export interface CreateOrderResponse {
+  message: string;
+  order: ApiOrder;
+}
+
+// Device API types
+export interface DeviceLocation {
+  lat: number;
+  lng: number;
+}
+
+export interface Device {
+  _id: string;
+  deviceName: string;
+  type: string;
+  status: string;
+  isActive: boolean;
+  lastLocation: DeviceLocation;
+  lastSeen: string;
+  currentOrder: any;
+}
+
+export interface DevicesResponse {
+  devices: Device[];
+}
+
+// Order API functions
+export const ordersApi = {
+  getOrders: () => api.get<OrdersResponse>("/orders"),
+  
+  createOrder: (data: CreateOrderRequest) => 
+    api.post<CreateOrderResponse>("/orders", data),
+};
+
+// Device API functions
+export const devicesApi = {
+  getDevices: () => api.get<DevicesResponse>("/device"),
 };
