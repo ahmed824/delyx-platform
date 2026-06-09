@@ -60,6 +60,56 @@ a {
   padding: 22px 13px;
   position: sticky;
   top: 0;
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+/* Mobile sidebar toggle button */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--primary-dark);
+}
+
+.sidebar-toggle i {
+  color: #fff;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-toggle.active i {
+  transform: rotate(90deg);
+}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
 }
 
 .brand {
@@ -189,7 +239,7 @@ a {
 }
 
 .dashboard-content {
-  padding: 32px 49px 36px;
+  padding: 32px 36px;
 }
 
 .dashboard-toolbar {
@@ -260,7 +310,7 @@ a {
 }
 
 .kpi-card {
-  height: 153px;
+  min-height: 153px;
   padding: 17px;
 }
 
@@ -353,7 +403,7 @@ a {
 
 .revenue-card {
   grid-row: span 2;
-  min-height: 323px;
+  min-height: 300px;
 }
 
 .bar-chart {
@@ -403,7 +453,7 @@ a {
 }
 
 .mini-card {
-  height: 167px;
+  min-height: 167px;
   padding: 19px 10px;
 }
 
@@ -441,7 +491,7 @@ a {
 }
 
 .growth-card {
-  min-height: 268px;
+  min-height: 250px;
 }
 
 .area-chart {
@@ -469,7 +519,7 @@ a {
 
 .donut-card {
   grid-row: span 2;
-  min-height: 451px;
+  min-height: 400px;
 }
 
 .donut-layout {
@@ -655,7 +705,7 @@ a {
 
 table {
   border-collapse: collapse;
-  min-width: 930px;
+  min-width: 600px;
   width: 100%;
 }
 
@@ -1069,14 +1119,62 @@ input[type="checkbox"] {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1024px) {
+  .sidebar {
+    flex: 0 0 240px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .revenue-card,
+  .donut-card {
+    grid-row: auto;
+  }
+
+  .order-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bars {
+    gap: 15px;
+  }
+
+  .bar-item span {
+    width: 28px;
+  }
+}
+
+@media (max-width: 768px) {
   .dashboard-shell {
     display: block;
   }
 
   .sidebar {
-    min-height: auto;
-    position: static;
+    position: fixed;
+    right: -100%;
+    top: 0;
+    height: 100vh;
+    z-index: 999;
+    width: 280px;
+    transition: right 0.3s ease;
+  }
+
+  .sidebar.active {
+    right: 0;
+  }
+
+  .sidebar-toggle {
+    display: block;
   }
 
   .sidebar-user {
@@ -1084,7 +1182,7 @@ input[type="checkbox"] {
   }
 
   .side-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .sidebar-line {
@@ -1099,6 +1197,14 @@ input[type="checkbox"] {
     padding: 20px;
   }
 
+  .topbar h1 {
+    font-size: 24px;
+  }
+
+  .topbar p {
+    font-size: 16px;
+  }
+
   .dashboard-content {
     padding: 24px 16px;
   }
@@ -1110,6 +1216,10 @@ input[type="checkbox"] {
     grid-template-columns: 1fr;
   }
 
+  .dashboard-toolbar {
+    flex-wrap: wrap;
+  }
+
   .orders-actions {
     align-items: flex-start;
     flex-direction: column;
@@ -1119,5 +1229,247 @@ input[type="checkbox"] {
   .tab-row,
   .sort-actions {
     flex-wrap: wrap;
+  }
+
+  .kpi-card {
+    min-height: 120px;
+  }
+
+  .mini-card {
+    min-height: 140px;
+  }
+
+  .revenue-card {
+    min-height: 250px;
+  }
+
+  .growth-card {
+    min-height: 200px;
+  }
+
+  .donut-card {
+    min-height: 350px;
+  }
+
+  .donut {
+    width: 150px;
+    height: 150px;
+  }
+
+  .donut::before {
+    inset: 22px;
+  }
+
+  .donut-label {
+    font-size: 16px;
+  }
+
+  .legend-grid {
+    gap: 10px 20px;
+    grid-template-columns: 1fr;
+  }
+
+  th {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+
+  td {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+
+  .bars {
+    gap: 10px;
+  }
+
+  .bar-item span {
+    width: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .sidebar-toggle {
+    top: 15px;
+    right: 15px;
+    padding: 10px;
+  }
+
+  .sidebar-toggle i {
+    font-size: 18px;
+  }
+
+  .topbar {
+    padding: 15px;
+  }
+
+  .topbar h1 {
+    font-size: 20px;
+  }
+
+  .topbar p {
+    font-size: 14px;
+  }
+
+  .dashboard-content {
+    padding: 20px 12px;
+  }
+
+  .kpi-card {
+    min-height: 100px;
+    padding: 12px;
+  }
+
+  .kpi-card h2,
+  .chart-card h2 {
+    font-size: 16px;
+  }
+
+  .kpi-card__value {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .circle-action {
+    height: 36px;
+    width: 36px;
+  }
+
+  .circle-action i {
+    font-size: 18px;
+  }
+
+  .mini-card {
+    min-height: 120px;
+    padding: 15px 8px;
+  }
+
+  .mini-card p {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  .mini-card p strong {
+    font-size: 20px;
+  }
+
+  .mini-card small {
+    font-size: 11px;
+  }
+
+  .mini-icon {
+    height: 40px;
+    width: 40px;
+  }
+
+  .revenue-card {
+    min-height: 200px;
+  }
+
+  .growth-card {
+    min-height: 180px;
+  }
+
+  .donut-card {
+    min-height: 300px;
+  }
+
+  .donut {
+    width: 130px;
+    height: 130px;
+  }
+
+  .donut::before {
+    inset: 18px;
+  }
+
+  .donut-label {
+    font-size: 14px;
+  }
+
+  .legend-grid {
+    gap: 8px 15px;
+  }
+
+  .legend-grid span {
+    font-size: 13px;
+  }
+
+  .legend-grid i {
+    height: 14px;
+    width: 14px;
+  }
+
+  .bar-chart {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .bar-axis {
+    font-size: 10px;
+    gap: 12px;
+  }
+
+  .bars {
+    gap: 8px;
+    height: 150px;
+  }
+
+  .bar-item span {
+    width: 20px;
+    border-radius: 12px;
+  }
+
+  .chart-labels {
+    font-size: 10px;
+  }
+
+  .area-chart svg {
+    height: 140px;
+    margin-left: 30px;
+    width: calc(100% - 30px);
+  }
+
+  .area-y {
+    font-size: 10px;
+    gap: 6px;
+    left: 2px;
+  }
+
+  th {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  td {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .filter-pill,
+  .sort-button {
+    font-size: 13px;
+    height: 30px;
+    padding: 0 8px;
+  }
+
+  .calendar-button {
+    height: 30px;
+    width: 30px;
+  }
+
+  .tab-row button {
+    font-size: 14px;
+    height: 32px;
+  }
+
+  .ui-button {
+    font-size: 14px;
+    height: 32px;
+    padding: 0 10px;
   }
 }

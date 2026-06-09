@@ -124,9 +124,7 @@ export default function Header() {
     { href: '/contact', label: 'Contact US' },
   ];
 
-  if (userRole === 'admin') {
-    navLinks.push({ href: '/dashboard', label: 'Dashboard' });
-  }
+  navLinks.push({ href: '/dashboard', label: 'Dashboard' });
 
   return (
     <header>

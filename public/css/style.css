@@ -326,7 +326,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: auto;
+  /* margin-top: auto; */
 }
 
 .sidebar-icons a {
@@ -1415,7 +1415,7 @@ textarea {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: fit-content;
 }
 
 .map-toolbar {

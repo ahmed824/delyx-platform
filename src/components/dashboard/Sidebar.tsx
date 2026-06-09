@@ -9,11 +9,13 @@ const navItems = [
 
 type SidebarProps = {
   pathname: string;
+  isActive?: boolean;
+  onToggle?: () => void;
 };
 
-export default function Sidebar({ pathname }: SidebarProps) {
+export default function Sidebar({ pathname, isActive = false, onToggle }: SidebarProps) {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isActive ? "active" : ""}`}>
       <div>
         <Link href="/" className="brand" aria-label="DELY X dashboard">
           <span>DELY</span>
@@ -28,7 +30,12 @@ export default function Sidebar({ pathname }: SidebarProps) {
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
             return (
-              <Link key={item.href} href={item.href} className={active ? "active" : ""}>
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                className={active ? "active" : ""}
+                onClick={() => onToggle?.()}
+              >
                 <span className="nav-icon">
                   <i className={`fa-solid ${item.icon}`}></i>
                 </span>
