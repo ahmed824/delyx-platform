@@ -94,7 +94,7 @@ export default function OrdersPage() {
     } else if (activeTab === "Waiting order") {
       return orders.filter((order) => order.status === "Waiting");
     } else if (activeTab === "On way order") {
-      return orders.filter((order) => order.status === "On way");
+      return orders.filter((order) => order.status === "On Way");
     } else if (activeTab === "Delivered order") {
       return orders.filter((order) => order.status === "Delivered");
     }
@@ -106,13 +106,13 @@ export default function OrdersPage() {
     const sorted = [...filteredOrders];
     switch (sortOption) {
       case "newest":
-        return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+        return sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       case "oldest":
-        return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+        return sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       case "highest":
-        return sorted.sort((a, b) => b.amount - a.amount);
+        return sorted.sort((a, b) => b.price - a.price);
       case "lowest":
-        return sorted.sort((a, b) => a.amount - b.amount);
+        return sorted.sort((a, b) => a.price - b.price);
       default:
         return sorted;
     }
