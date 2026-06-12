@@ -28,21 +28,21 @@ export default function DashboardPage() {
       {isAdmin && (
         <div className="dashboard-grid">
           <div className="kpi-grid">
-            <KpiCard title="Total revenue" value="$ 99.560" trend="2.67%" tone="orange" />
+            <KpiCard title="Total revenue" value="EGP 99.560" trend="2.67%" tone="orange" />
             <KpiCard title="Total order" value="50" trend="1.55%" down />
             <KpiCard title="Total visitors" value="600" trend="1.55%" />
-            <KpiCard title="Net profit" value="$ 54,660" trend="1.55%" />
+            <KpiCard title="Net profit" value="EGP 54,660" trend="1.55%" />
           </div>
 
           <ChartWrapper title="Revenue" className="revenue-card">
             <div className="bar-chart">
               <div className="bar-axis">
-                <span>7000$</span>
-                <span>5000$</span>
-                <span>1000$</span>
-                <span>350$</span>
-                <span>100$</span>
-                <span>0$</span>
+                <span>7000 EGP</span>
+                <span>5000 EGP</span>
+                <span>1000 EGP</span>
+                <span>350 EGP</span>
+                <span>100 EGP</span>
+                <span>0 EGP</span>
               </div>
               <div className="bars">
                 {[42, 62, 78, 100, 42, 86, 22].map((height, index) => (

@@ -75,7 +75,7 @@ export default function Login() {
             </div>
             <div className="form login animate-form-login">
               <form className="form" onSubmit={handleSubmit}>
-                <div className="flex-column">
+                <div className="flex-column mb-4" >
                   <label>Email or Phone number </label>
                   <div className="inputForm">
                     <input
@@ -90,7 +90,7 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="flex-column">
+                <div className="flex-column mb-4">
                   <label>Password </label>
                   <div className="inputForm">
                     <input
@@ -107,7 +107,7 @@ export default function Login() {
                 </div>
 
                 <div className="flex-row">
-                  <div>
+                  <div className="remember-label">
                     <input type="radio" />
                     <label>Remember me </label>
                   </div>

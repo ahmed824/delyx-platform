@@ -25,7 +25,7 @@ export default async function OrderDetailsPage({ params }: OrderDetailsProps) {
           </div>
           <div className="info-grid">
             <span><b>Category</b>{order.category}</span>
-            <span><b>Price</b>${order.price}</span>
+            <span><b>Price</b>EGP {order.price}</span>
             <span><b>Payment</b>{order.payment}</span>
             <span><b>Address</b>{order.address}</span>
           </div>

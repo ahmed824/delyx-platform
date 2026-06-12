@@ -124,7 +124,9 @@ export default function Header() {
     { href: '/contact', label: 'Contact US' },
   ];
 
-  navLinks.push({ href: '/dashboard', label: 'Dashboard' });
+  if (isAuthenticated) {
+    navLinks.push({ href: '/dashboard', label: 'Dashboard' });
+  }
 
   return (
     <header>

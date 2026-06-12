@@ -26,7 +26,7 @@ export default function LogoutModal({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 50,
+        zIndex: 1020,
       }}
     >
       <div

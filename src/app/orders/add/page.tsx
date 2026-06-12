@@ -107,7 +107,7 @@ export default function AddOrderPage() {
                   required
                 />
               </label>
-              <label>Price ($)
+              <label>Price (EGP)
                 <input
                   type="number"
                   min="0"
@@ -140,7 +140,7 @@ export default function AddOrderPage() {
           </button>
 
           <div style={{ padding: "16px", background: "#f9f9f9", borderRadius: "8px", marginBottom: "16px" }}>
-            <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
+            <strong>Total Price: EGP {totalPrice.toFixed(2)}</strong>
           </div>
 
           {error && (

@@ -9,7 +9,7 @@ export default function SettingsPage() {
         <Card>
           <h2 className="form-title">Profile settings</h2>
           <div className="form-grid">
-            <label>Full name<input defaultValue="Ahmed khaled" /></label>
+            <label>Full name<input defaultValue="Ahmed Abdo" /></label>
             <label>Email<input defaultValue="ahmed@delyx.com" /></label>
             <label>Phone<input defaultValue="+20 XXX XXX XXXX" /></label>
             <label>Store name<input defaultValue="DELY X Store" /></label>

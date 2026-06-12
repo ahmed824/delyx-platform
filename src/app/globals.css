@@ -60,6 +60,7 @@ a {
   padding: 22px 13px;
   position: sticky;
   top: 0;
+  z-index: 10;
   transition: transform 0.3s ease, width 0.3s ease;
 }
 

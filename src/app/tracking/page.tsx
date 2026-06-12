@@ -5,7 +5,8 @@ import Card from "@/components/dashboard/Card";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { updates } from "@/data/dashboard";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { devicesApi, type Device } from "@/lib/api";
+import { devicesApi, ordersApi, type Device } from "@/lib/api";
+import toast from "react-hot-toast";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
@@ -24,6 +25,7 @@ export default function TrackingPage() {
   const [loading, setLoading] = useState(true);
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
   const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const orders = [
     {
@@ -31,7 +33,7 @@ export default function TrackingPage() {
       status: 'Delivery',
       from: '12 Mustafa El-Nahhas St, Nasr City',
       to: 'Abbas El Akkad St, Nasr City',
-      customer: 'Ahmed Hassan',
+      customer: 'Ahmed Ahmed',
       note: 'Customer',
     },
     {
@@ -86,12 +88,22 @@ export default function TrackingPage() {
     }
   };
 
+  const handleDelivered = async (orderId: string) => {
+    try {
+      await ordersApi.markAsDelivered(orderId);
+      toast.success("Order marked as delivered");
+    } catch (error) {
+      console.error("Error marking order as delivered:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to mark order as delivered");
+    }
+  };
+
   return (
     <DashboardLayout title="Tracking Delivery">
       <div className="tracking-grid">
         <div className="orders-column">
           {/* Active Devices Card */}
-          <Card className="order-card dash-card" style={{ marginBottom: "16px" }}>
+          <Card className="order-card dash-card"  >
             <div className="order-header">
               <strong className="order-id">Active Devices</strong>
               <span className="badge">{devices.length}</span>
@@ -131,15 +143,36 @@ export default function TrackingPage() {
                           </p>
                         )}
                       </div>
-                      <span style={{
-                        padding: "4px 8px",
-                        borderRadius: "12px",
-                        fontSize: "10px",
-                        backgroundColor: device.isActive ? "#e8f5e9" : "#fff3e0",
-                        color: device.isActive ? "#2e7d32" : "#e65100"
-                      }}>
-                        {device.isActive ? "Active" : "Inactive"}
-                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{
+                          padding: "4px 8px",
+                          borderRadius: "12px",
+                          fontSize: "10px",
+                          backgroundColor: device.isActive ? "#e8f5e9" : "#fff3e0",
+                          color: device.isActive ? "#2e7d32" : "#e65100"
+                        }}>
+                          {device.isActive ? "Active" : "Inactive"}
+                        </span>
+                        <button
+                          className="icon-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelivered(device.currentOrder);
+                          }}
+                          title="Mark as delivered"
+                          style={{
+                            padding: "6px",
+                            background: "#FE9F30",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            color: "white",
+                            fontSize: "12px"
+                          }}
+                        >
+                          <i className="fa-solid fa-check"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -178,6 +211,13 @@ export default function TrackingPage() {
                   </div>
                 </div>
                 <div className="contacts">
+                  <button 
+                    className="icon-btn"
+                    onClick={() => handleDelivered(o.id.replace('#', ''))}
+                    title="Mark as delivered"
+                  >
+                    <i className="fa-solid fa-check"></i>
+                  </button>
                   <button className="icon-btn"><i className="fa-solid fa-phone"></i></button>
                   <button className="icon-btn"><i className="fa-solid fa-envelope"></i></button>
                 </div>
@@ -196,22 +236,29 @@ export default function TrackingPage() {
           </div>
           <div style={{ position: "relative", minHeight: "400px" }}>
             {GOOGLE_MAPS_API_KEY ? (
-              <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
+              <LoadScript 
+                googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+                onLoad={() => setIsMapLoaded(true)}
+              >
                 <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   center={mapCenter}
                   zoom={14}
                 >
-                  {selectedDevice && selectedDevice.lastLocation && (
+                  {selectedDevice && selectedDevice.lastLocation && isMapLoaded && (
                     <Marker
                       position={{
                         lat: selectedDevice.lastLocation.lat,
                         lng: selectedDevice.lastLocation.lng,
                       }}
-                      icon={{
-                        url: "/images/car-deliver.png",
-                        scaledSize: new window.google.maps.Size(40, 40),
-                      }}
+                      icon={
+                        window.google && window.google.maps
+                          ? {
+                              url: "/images/car-deliver.png",
+                              scaledSize: new window.google.maps.Size(40, 40),
+                            }
+                          : undefined
+                      }
                       title={selectedDevice.deviceName}
                     />
                   )}

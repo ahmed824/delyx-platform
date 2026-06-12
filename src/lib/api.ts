@@ -175,7 +175,7 @@ export interface Device {
   isActive: boolean;
   lastLocation: DeviceLocation;
   lastSeen: string;
-  currentOrder: any;
+  currentOrder: string;
 }
 
 export interface DevicesResponse {
@@ -188,6 +188,9 @@ export const ordersApi = {
   
   createOrder: (data: CreateOrderRequest) => 
     api.post<CreateOrderResponse>("/orders", data),
+
+  markAsDelivered: (orderId: string) =>
+    api.patch<{ message: string }>(`/orders/${orderId}/delivered`),
 };
 
 // Device API functions

@@ -28,7 +28,7 @@ export default function OrderTable({ orders }: OrderTableProps) {
               </td>
               <td>{order.customer}</td>
               <td>{order.category}</td>
-              <td>${order.price}</td>
+              <td>EGP {order.price}</td>
               <td>{order.date}</td>
               <td>{order.payment}</td>
               <td>
