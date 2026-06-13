@@ -114,7 +114,19 @@ const orders = [
           <Card className="order-card dash-card"  >
             <div className="order-header">
               <strong className="order-id">Active Devices</strong>
-              <span className="badge">{devices.length}</span>
+              {selectedDevice ? (
+                <span 
+                  className="badge"
+                  style={{
+                    backgroundColor: selectedDevice.status === "active" ? "#e8f5e9" : "#fff3e0",
+                    color: selectedDevice.status === "active" ? "#2e7d32" : "#e65100"
+                  }}
+                >
+                  {selectedDevice.status}
+                </span>
+              ) : (
+                <span className="badge">{devices.length}</span>
+              )}
             </div>
             <div style={{ padding: "16px 0" }}>
               {loading ? (

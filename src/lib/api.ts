@@ -161,6 +161,25 @@ export interface CreateOrderResponse {
   order: ApiOrder;
 }
 
+export interface OrderDetailsResponse {
+  order: ApiOrder & {
+    deviceId?: {
+      lastLocation: { lat: number; lng: number };
+      _id: string;
+      deviceName: string;
+      type: string;
+      status: string;
+      currentOrder: string;
+      isActive: boolean;
+      lastSeen: string;
+      createdAt: string;
+      updatedAt: string;
+      __v: number;
+      id: string;
+    };
+  };
+}
+
 // Device API types
 export interface DeviceLocation {
   lat: number;
@@ -185,6 +204,9 @@ export interface DevicesResponse {
 // Order API functions
 export const ordersApi = {
   getOrders: () => api.get<OrdersResponse>("/orders"),
+  
+  getOrderById: (orderId: string) =>
+    api.get<OrderDetailsResponse>(`/orders/${orderId}`),
   
   createOrder: (data: CreateOrderRequest) => 
     api.post<CreateOrderResponse>("/orders", data),
