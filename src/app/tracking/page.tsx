@@ -26,6 +26,14 @@ export default function TrackingPage() {
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
   const [mapCenter, setMapCenter] = useState(defaultCenter);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetchDevices();
+    // Check if user is admin from localStorage
+    const userRole = localStorage.getItem("user_role");
+    setIsAdmin(userRole === "admin");
+  }, []);
 
   const orders = [
     {
@@ -181,7 +189,7 @@ export default function TrackingPage() {
           </Card>
 
           {/* Orders List */}
-          {orders.map((o) => (
+          {(isAdmin ? orders : orders.filter(o => o.status === 'Delivery')).map((o) => (
             <Card key={o.id} className="order-card">
               <div className="order-header">
                 <strong className="order-id">{o.id}</strong>

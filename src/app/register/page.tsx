@@ -23,7 +23,7 @@ export default function Register() {
     phone: "",
     gender: "male",
     address: "",
-    role: "admin",
+    role: "user",
   });
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
