@@ -3,9 +3,11 @@ import type { Order } from "@/lib/types";
 
 type OrderTableProps = {
   orders: Order[];
+  isAdmin?: boolean;
+  onDispatch?: (orderId: string) => void;
 };
 
-export default function OrderTable({ orders }: OrderTableProps) {
+export default function OrderTable({ orders, isAdmin = false, onDispatch }: OrderTableProps) {
   return (
     <div className="table-card">
       <table>
@@ -17,7 +19,7 @@ export default function OrderTable({ orders }: OrderTableProps) {
             <th>Price</th>
             <th>Date</th>
             <th>Payment</th>
-            <th>•••</th>
+            {isAdmin && <th>•••</th>}
           </tr>
         </thead>
         <tbody>
@@ -31,11 +33,17 @@ export default function OrderTable({ orders }: OrderTableProps) {
               <td>EGP {order.price}</td>
               <td>{order.date}</td>
               <td>{order.payment}</td>
-              <td>
-                <button className="dots-button" aria-label={`Actions for ${order.id}`}>
-                  •••
-                </button>
-              </td>
+              {isAdmin && (
+                <td>
+                  <button 
+                    className="dots-button" 
+                    aria-label={`Actions for ${order.id}`}
+                    onClick={() => onDispatch?.(order.id)}
+                  >
+                    •••
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

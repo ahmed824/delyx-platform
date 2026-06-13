@@ -65,7 +65,7 @@ async function request<T>(
     if (role === "admin") {
       headers["Authorization"] = `admin ${token}`;
     } else {
-      headers["Authorization"] = `Bearer ${token}`;
+      headers["Authorization"] = `bearer ${token}`;
     }
   }
 
@@ -73,7 +73,7 @@ async function request<T>(
     hasAuthorization: !!headers.Authorization,
     authHeaderLength: headers.Authorization?.length,
     authHeaderPreview: headers.Authorization ? `${headers.Authorization.substring(0, 30)}...` : 'none',
-    fullAuthHeader: headers.Authorization ? `${role === 'admin' ? 'admin' : 'Bearer'} ${token?.substring(0, 20)}...` : 'none',
+    fullAuthHeader: headers.Authorization ? `${role === 'admin' ? 'admin' : 'bearer'} ${token?.substring(0, 20)}...` : 'none',
   });
 
   const response = await fetch(url, {
@@ -191,6 +191,9 @@ export const ordersApi = {
 
   markAsDelivered: (orderId: string) =>
     api.patch<{ message: string }>(`/orders/${orderId}/delivered`),
+
+  dispatchOrder: (orderId: string, deviceId: string) =>
+    api.patch<{ message: string }>("/orders/dispatch", { orderId, deviceId }),
 };
 
 // Device API functions

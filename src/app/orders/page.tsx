@@ -6,6 +6,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import OrderTable from "@/components/dashboard/OrderTable";
 import type { Order, StatusSummary } from "@/lib/types";
 import { ordersApi, type ApiOrder } from "@/lib/api";
+import toast from "react-hot-toast";
 
 const tabs = ["New order", "Waiting order", "On way order", "Delivered order"];
 
@@ -25,9 +26,16 @@ export default function OrdersPage() {
   const [statusSummary, setStatusSummary] = useState<StatusSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showDispatchModal, setShowDispatchModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState("");
+  const [isDispatching, setIsDispatching] = useState(false);
 
   useEffect(() => {
     fetchOrders();
+    // Check if user is admin from localStorage
+    const userRole = localStorage.getItem("user_role");
+    setIsAdmin(userRole === "admin");
   }, []);
 
   const fetchOrders = async () => {
@@ -125,6 +133,27 @@ export default function OrdersPage() {
   const handleSortChange = (option: string) => {
     setSortOption(option);
     setIsSortDropdownOpen(false);
+  };
+
+  const handleDispatchClick = (orderId: string) => {
+    setSelectedOrderId(orderId);
+    setShowDispatchModal(true);
+  };
+
+  const handleDispatch = async () => {
+    const deviceId = "6a04c7f72e328c2cc9c6b66d";
+    setIsDispatching(true);
+    try {
+      await ordersApi.dispatchOrder(selectedOrderId, deviceId);
+      toast.success("Order dispatched successfully");
+      setShowDispatchModal(false);
+      fetchOrders(); // Refresh orders to update status
+    } catch (error) {
+      console.error("Error dispatching order:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to dispatch order");
+    } finally {
+      setIsDispatching(false);
+    }
   };
 
   const currentSortLabel = sortOptions.find((opt) => opt.value === sortOption)?.label || "Default";
@@ -241,8 +270,169 @@ export default function OrdersPage() {
             </div>
           </div>
 
-          <OrderTable orders={sortedOrders} />
+          <OrderTable orders={sortedOrders} isAdmin={isAdmin} onDispatch={handleDispatchClick} />
         </>
+      )}
+
+      {/* Dispatch Modal */}
+      {showDispatchModal && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1020,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "1.5rem",
+              padding: "2rem",
+              maxWidth: "28rem",
+              width: "100%",
+              margin: "0 1rem",
+              fontFamily: "Lato, sans-serif",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "1.875rem",
+                fontWeight: 700,
+                marginBottom: "0.5rem",
+                fontFamily: "League Spartan, sans-serif",
+                color: "#444",
+              }}
+            >
+              Dispatch Order
+            </h2>
+            <p
+              style={{
+                marginBottom: "1.5rem",
+                color: "#4e4e4e",
+                fontSize: "1rem",
+                lineHeight: "1.6",
+              }}
+            >
+              Select a device to dispatch this order
+            </p>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  color: "#444",
+                }}
+              >
+                Device
+              </label>
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                }}
+              >
+                <select
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem 1rem",
+                    paddingRight: "3rem",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #e0e0e0",
+                    backgroundColor: "#f9f9f9",
+                    fontSize: "1rem",
+                    color: "#4e4e4e",
+                    cursor: "not-allowed",
+                    appearance: "none",
+                  }}
+                >
+                  <option value="6a04c7f72e328c2cc9c6b66d">Delivery Drone 1</option>
+                </select>
+                <img
+                  src="/images/car-deliver.png"
+                  alt="Device"
+                  style={{
+                    position: "absolute",
+                    right: "0.75rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "32px",
+                    height: "32px",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button
+                type="button"
+                onClick={() => setShowDispatchModal(false)}
+                disabled={isDispatching}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "9999px",
+                  fontWeight: 600,
+                  transition: "all 0.3s ease",
+                  backgroundColor: "#f5f5f5",
+                  color: "#444",
+                  fontFamily: "Lato, sans-serif",
+                  cursor: isDispatching ? "not-allowed" : "pointer",
+                  opacity: isDispatching ? 0.5 : 1,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isDispatching) e.currentTarget.style.backgroundColor = "#e0e0e0";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f5f5f5";
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDispatch}
+                disabled={isDispatching}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "9999px",
+                  fontWeight: 600,
+                  transition: "all 0.3s ease",
+                  opacity: isDispatching ? 0.5 : 1,
+                  cursor: isDispatching ? "not-allowed" : "pointer",
+                  backgroundColor: "#fe9f30",
+                  color: "#fff",
+                  fontFamily: "Lato, sans-serif",
+                  letterSpacing: "1px",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isDispatching) {
+                    e.currentTarget.style.backgroundColor = "#fff";
+                    e.currentTarget.style.color = "#fe9f30";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isDispatching) {
+                    e.currentTarget.style.backgroundColor = "#fe9f30";
+                    e.currentTarget.style.color = "#fff";
+                  }
+                }}
+              >
+                {isDispatching ? "Dispatching..." : "Dispatch"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </DashboardLayout>
   );
