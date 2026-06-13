@@ -35,32 +35,32 @@ export default function TrackingPage() {
     setIsAdmin(userRole === "admin");
   }, []);
 
-  const orders = [
-    {
-      id: '#35787588',
-      status: 'Delivery',
-      from: '12 Mustafa El-Nahhas St, Nasr City',
-      to: 'Abbas El Akkad St, Nasr City',
-      customer: 'Ahmed Ahmed',
-      note: 'Customer',
-    },
-    {
-      id: '#87686588',
-      status: 'Pending',
-      from: 'Villa 15, Street 90, New Cairo',
-      to: 'Axis Road, 6th of October City, Giza',
-      customer: 'Omar Khaled',
-      note: 'Customer',
-    },
-    {
-      id: '#96870980',
-      status: 'Transit',
-      from: 'Building 8, District 5, New Cairo',
-      to: 'Axis Road, 6th of October City, Giza',
-      customer: 'Amr Samir',
-      note: 'Customer',
-    },
-  ];
+const orders = [
+  {
+    id: '#35787588',
+    status: 'Delivery',
+    from: 'مدينة السماد، طلخا',
+    to: 'جامعة المنصورة',
+    customer: 'Ahmed Ahmed',
+    note: 'Customer',
+  },
+  {
+    id: '#87686588',
+    status: 'Pending',
+    from: 'مدينة السماد، طلخا',
+    to: 'حي توريل، المنصورة',
+    customer: 'Omar Khaled',
+    note: 'Customer',
+  },
+  {
+    id: '#96870980',
+    status: 'Transit',
+    from: 'مدينة السماد، طلخا',
+    to: 'المشاية السفلية، المنصورة',
+    customer: 'Amr Samir',
+    note: 'Customer',
+  },
+];
 
   useEffect(() => {
     fetchDevices();
